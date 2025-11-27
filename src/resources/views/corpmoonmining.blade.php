@@ -73,4 +73,9 @@
         @endforeach
 </div>
 @endisset
+    <div class="card">
+        <div class="card-header">
+            <h4>Create Event</h4>
+        </div>
+    </div>
 @stop
