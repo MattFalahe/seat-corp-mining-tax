@@ -21,10 +21,6 @@
             <h4>Create Event</h4>
         </div>
         <div class="card-body">
-            <p id="deb"></p>
-            @isset($status)
-            <p>{{ $status }}</p>
-            @endisset
             <form action="{{ route('corpminingtax.createevent') }}" method="post" id="new-event" name="new-event">
                 {{ csrf_field() }}
                 <div class="form-row">
@@ -37,7 +33,7 @@
                         <input type='text' class="form-control datepicker" id="start" name="start" placeholder="Select Date..">
                     </div>
                     <div class="col">
-                        <label for="duration">Duration <small>days</small></label>
+                        <label for="duration">Duration <small>hours</small></label>
                         <input type="number" class="form-control" id="duration" name="duration">
                     </div>
                     <div class="col">
@@ -47,6 +43,7 @@
                     <div class="col">
                         <label for="valuation">Valuation</label>
                         <select class="custom-select mr-sm-2" name="valuation" id="valuation">
+                            <option value="none" selected>none</option>
                             <option value="less">less tax</option>
                             <option value="plus">plus tax</option>
                         </select>
@@ -60,7 +57,7 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <bolt><small>*Valuation</small> less tax = deduct from tax plus tax = plus event tax to tax</bolt>
+                    <bolt><small>*Valuation</small> less tax = deduct from tax &nbsp;&nbsp;plus tax = plus event tax to tax &nbsp;&nbsp;none=don't tax</bolt>
                 </div>
                 <div class="form-row">
                     <button type="submit" class="btn btn-primary" id="send">Add Event</button>
@@ -74,23 +71,29 @@
                 <h3>Corp Mining Events</h3>
             </div>
             <div class="card-body">
-                <div class="col-md">
-                    <div class="btn-group submitter-group float-right">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Status</div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-9" style="height:50px"></div>
+                        <div class="col-3">
+                            <div class="btn-group float-right">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Filter</div>
+                                </div>
+                                <select class="form-control status-dropdown" style="width:112px; display:inline">
+                                    <option value="">all</option>
+                                    <option value="1">new</option>
+                                    <option value="2">running</option>
+                                    <option value="3">completed</option>
+                                </select>
+                            </div>
                         </div>
-                        <select class="form-control status-dropdown">
-                            <option value="">all</option>
-                            <option value="1">new</option>
-                            <option value="2">running</option>
-                            <option value="3">completed</option>
-                        </select>
                     </div>
                 </div>
                 <table class="table" id="events">
                     <thead>
                     <tr>
                         <th>Date</th>
+                        <th>Start</th>
                         <th>Event</th>
                         <th>Duration</th>
                         <th>Tax Rate</th>
@@ -105,8 +108,9 @@
                     @foreach($events as $event)
                         <tr id="tr_{{ $event->id }}">
                             <td>{{ date("Y-m-d", strtotime($event->event_start)) }}</td>
+                            <td>{{ date("H:i", strtotime($event->event_start)) }}</td>
                             <td><b>{{ $event->event_name }}</b></td>
-                            <td>{{ $event->event_duration }} day(s)</td>
+                            <td>{{ $event->event_duration }} hours</td>
                             <td>{{ $event->event_tax }} %</td>
                             <td>{{ number_format($event->total) }}</td>
                             @if ($event->event_tracker == "automatic")
@@ -158,22 +162,23 @@
             dataTable = $('#events').DataTable({
                 "columnDefs": [
                     {
-                        "targets": [8],
+                        "targets": [9],
                         "visible": false
                     }
                 ]
             });
 
             $('.datepicker').flatpickr({
-                enableTime: false,
-                dateFormat: "Y-m-d",
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
             });
 
             $('.status-dropdown').on('change', function (e) {
                 var status = $(this).val();
                 $('.status-dropdown').val(status)
                 console.log(status)
-                dataTable.column(7).search(status).draw();
+                dataTable.column(9).search(status).draw();
             });
 
             $('#events').on('click', '.details', function(e) {

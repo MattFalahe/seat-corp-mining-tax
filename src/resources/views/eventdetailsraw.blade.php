@@ -19,7 +19,7 @@
             <div class="col-4">
                 <dl>
                     <dt>Event Duration</dt>
-                    <dd>{{ $event_data->event_duration }} days</dd>
+                    <dd>{{ $event_data->event_duration }} hours</dd>
                 </dl>
             </div>
         </div>

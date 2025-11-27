@@ -153,6 +153,6 @@ class SeatCorpMiningTaxServiceProvider extends AbstractSeatPlugin
      */
     public function getPackagistVendorName(): string
     {
-        return 'pyTonicis';
+        return 'pytonicis';
     }
 }

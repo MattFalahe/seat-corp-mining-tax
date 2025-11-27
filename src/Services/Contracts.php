@@ -92,13 +92,15 @@ class Contracts
             ->select('*')
             ->where('corporation_id', '=', $corp_id)
             ->get();
-        foreach ($contracts as $contract) {
-            if ($contract->contractId == 0) {
-                $contract_id = $this->searchContractId($contract->contractTitle);
-                if ($contract_id != 0) {
-                    DB::table('corp_mining_tax_contracts')
-                        ->where('id', '=', (int)$contract->id)
-                        ->update(['contractId' => $contract_id]);
+        if (!$contracts->isEmpty()) {
+            foreach ($contracts as $contract) {
+                if ($contract->contractId == 0) {
+                    $contract_id = $this->searchContractId($contract->contractTitle);
+                    if ($contract_id != 0) {
+                        DB::table('corp_mining_tax_contracts')
+                            ->where('id', '=', (int)$contract->id)
+                            ->update(['contractId' => $contract_id]);
+                    }
                 }
             }
         }
@@ -111,14 +113,16 @@ class Contracts
             ->where('contractStatus', '!=', 0)
             ->where('contractId', '!=', 0)
             ->get();
-        foreach ($contracts as $contract) {
-            $contract_status = $this->getContractStatus($contract->contractId);
-            if ($contract_status == 'finished') {
-                $this->setTaxContractStatus($contract->contractId, 3);
-            } elseif($contract_status == 'outstanding') {
-                $this->setTaxContractStatus($contract->contractId, 4);
-            } elseif($contract_status == 'in_progress') {
-                $this->setTaxContractStatus($contract->contractId, 2);
+        if (!$contracts->isEmpty()) {
+            foreach ($contracts as $contract) {
+                $contract_status = $this->getContractStatus($contract->contractId);
+                if ($contract_status == 'finished') {
+                    $this->setTaxContractStatus($contract->contractId, 3);
+                } elseif ($contract_status == 'outstanding') {
+                    $this->setTaxContractStatus($contract->contractId, 4);
+                } elseif ($contract_status == 'in_progress') {
+                    $this->setTaxContractStatus($contract->contractId, 2);
+                }
             }
         }
     }

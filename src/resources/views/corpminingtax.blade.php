@@ -25,7 +25,7 @@
                 <div class="col-md-4 mb-3">
                     <label for="mining_month">Month</label>
                     <select class="custom-select mr-sm-2" name="mining_month" id="mining_month">
-                        <option value="1" selected>January</option>
+                        <option value="1">January</option>
                         <option value="2">February</option>
                         <option value="3">March</option>
                         <option value="4">April</option>
@@ -46,7 +46,7 @@
                         <option value="2021">2021</option>
                         <option value="2022">2022</option>
                         <option value="2023">2023</option>
-                        <option value="2024" selected>2024</option>
+                        <option value="2024">2024</option>
                         <option value="2025">2025</option>
                         <option value="2026">2026</option>
                     </select>
@@ -206,36 +206,32 @@
 @stop
 
 @push('javascript')
-    @push('javascript')
-        <script>
-            function on() {
-                document.getElementById("overlay").style.display = "flex";
-            }
-        </script>
-    @endpush
     <script>
-        table = $('#mining').DataTable({
-        });
+        $(document).ready(function () {
+            table = $('#mining').DataTable({});
 
-        $('#corpId').select2({
-            placeholder: 'Corporation Name',
-            ajax: {
-                url: '/corpminingtax/getCorporations',
-                dataType: 'json',
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                text: item.name,
-                                id: item.id
-                            }
-                        })
-                    };
-                },
-                cache: true
-            }
+            $('#corpId').select2({
+                placeholder: 'Corporation Name',
+                ajax: {
+                    url: '/corpminingtax/getCorporations',
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+            var d = Date();
+            $('#mining_month').val(d.getMonth()+1).change();
+            $('#mining_year').val(d.getFullYear()).change();
         });
-
     </script>
 @endpush

@@ -22,7 +22,7 @@ class CorpMiningContracts extends Controller
             ->where('contractStatus', '=', 4)
             ->orderBy('character_name')
             ->get();
-        if (is_null($outstanding_contracts)) {
+        if ($outstanding_contracts->isEmpty()) {
             return view('corpminingtax::corpminingtaxcontracts', ['contracts' => $contracts]);
         } else {
             return view('corpminingtax::corpminingtaxcontracts', ['contracts' => $contracts, 'outstanding_contracts' => $outstanding_contracts,]);

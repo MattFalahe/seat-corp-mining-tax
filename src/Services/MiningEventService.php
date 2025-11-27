@@ -24,9 +24,14 @@ class MiningEventService
         $data = DB::table('corp_mining_tax_events')
             ->select('*')
             ->get();
-        if(!empty($data)) {
-            $status = DB::update(DB::raw("update corp_mining_tax_events set event_status=2 where event_start <= date(now()) and event_stop >= date(now())"));
-            $status = DB::update(DB::raw("update corp_mining_tax_events set event_status=3 where event_stop < date(now())"));
+        if(!$data->isEmpty()) {
+            DB::table('corp_mining_tax_events')
+                ->where('event_start', '<=', date(now()))
+                ->where('event_stop', '>=', date(now()))
+                ->update(['event_status' => 2]);
+            DB::table('corp_mining_tax_events')
+                ->where('event_stop', '<', date(now()))
+                ->update(['event_status' => 3]);
         }
     }
 

@@ -48,19 +48,23 @@
             <h3>Corporation Tax Contracts</h3>
         </div>
         <div class="card-body">
-            <p id="deb"></p>
-            <div class="col-md">
-                <div class="btn-group submitter-group float-right">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Status</div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-9" style="height:50px"></div>
+                    <div class="col-3">
+                        <div class="btn-group float-right">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Filter</div>
+                            </div>
+                            <select class="form-control status-dropdown" style="width:112px; display:inline">
+                                <option value="">all</option>
+                                <option value="1">new</option>
+                                <option value="2">offered</option>
+                                <option value="3">complete</option>
+                                <option value="4">outstanding</option>
+                            </select>
+                        </div>
                     </div>
-                    <select class="form-control status-dropdown">
-                        <option value="">all</option>
-                        <option value="1">new</option>
-                        <option value="2">offered</option>
-                        <option value="3">clear</option>
-                        <option value="4">outstanding</option>
-                    </select>
                 </div>
             </div>
             <table class="table" id="contracts">

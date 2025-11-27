@@ -127,6 +127,8 @@ class CorpMiningOverviewController extends Controller
             ->whereIn('cm.character_id', $characters)
             ->where('cm.date', '>=', date('Y-m-01 00:00:00', strtotime('-1 years', time())))
             ->groupBy('cm.type_id')
+            ->orderBy('quantity', 'asc')
+            ->limit(20)
             ->get();
         $type_labels = array();
         $type_quantity = array();
@@ -291,6 +293,8 @@ class CorpMiningOverviewController extends Controller
                 ->where('cm.character_id', $sid)
                 ->where('cm.date', '>=', date('Y-m-01 00:00:00', strtotime('-1 years', time())))
                 ->groupBy('cm.type_id')
+                ->orderBy('quantity', 'asc')
+                ->limit(20)
                 ->get();
         } else {
             $character = auth()->user()->main_character['character_id'];
@@ -301,6 +305,8 @@ class CorpMiningOverviewController extends Controller
                 ->whereIn('cm.character_id', $characters)
                 ->where('cm.date', '>=', date('Y-m-01 00:00:00', strtotime('-1 years', time())))
                 ->groupBy('cm.type_id')
+                ->orderBy('quantity', 'asc')
+                ->limit(20)
                 ->get();
         }
         $type_labels = array();
